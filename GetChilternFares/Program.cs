@@ -14,6 +14,7 @@ namespace GetChilternFares
             try
             {
                 var flowidMap = new HashSet<int>();
+                var rescodeMap = new HashSet<string>();
                 foreach (var line in File.ReadAllLines("s:\\rjfaf782.ffl"))
                 {
                     if (line.Length <= 2 || line[0] != 'R')
@@ -34,10 +35,30 @@ namespace GetChilternFares
                         var rescode = line.Substring(20, 2);
                         if (rescode != "  " && flowidMap.Contains(flowid))
                         {
-                            Console.WriteLine($"{rescode}");   
+                            rescodeMap.Add(rescode);
                         }
                     }
                 }
+                foreach (var line in File.ReadAllLines("s:\\rjfaf782.rst"))
+                {
+                    if (line.Length <= 2 || line[0] != 'R')
+                    {
+                        continue;
+                    }
+                    if (line[1] == 'T' && line[2] == 'R' && line[3] == 'C' && line[10] == 'O' && line[19] == 'D')
+                    {
+                        var rescode = line.Substring(4, 2);
+                        if (rescodeMap.Contains(rescode))
+                        {
+                            var crs = line.Substring(20, 3);
+                            var starttime = line.Substring(11, 4);
+                            var endtime = line.Substring(15, 4);
+                            Console.WriteLine($"{rescode} : from {starttime.Substring(0, 2)}:{starttime.Substring(2, 2)} to {endtime.Substring(0, 2)}:{endtime.Substring(2, 2)} at CRS {crs}");
+                        }
+                    }
+                }
+
+
             }
             catch (Exception ex)
             {
