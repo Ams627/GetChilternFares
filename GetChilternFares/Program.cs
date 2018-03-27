@@ -13,9 +13,10 @@ namespace GetChilternFares
         {
             try
             {
+                var setnum = 789;
                 var flowidMap = new HashSet<int>();
                 var rescodeMap = new HashSet<string>();
-                foreach (var line in File.ReadAllLines("s:\\rjfaf782.ffl"))
+                foreach (var line in File.ReadAllLines($"s:\\rjfaf{setnum:D3}.ffl"))
                 {
                     if (line.Length <= 2 || line[0] != 'R')
                     {
@@ -39,7 +40,7 @@ namespace GetChilternFares
                         }
                     }
                 }
-                foreach (var line in File.ReadAllLines("s:\\rjfaf782.rst"))
+                foreach (var line in File.ReadAllLines($"s:\\rjfaf{setnum:D3}.rst"))
                 {
                     if (line.Length <= 2 || line[0] != 'R')
                     {
@@ -53,7 +54,8 @@ namespace GetChilternFares
                             var crs = line.Substring(20, 3);
                             var starttime = line.Substring(11, 4);
                             var endtime = line.Substring(15, 4);
-                            Console.WriteLine($"{rescode} : from {starttime.Substring(0, 2)}:{starttime.Substring(2, 2)} to {endtime.Substring(0, 2)}:{endtime.Substring(2, 2)} at CRS {crs}");
+                            string name = crs == "   " ? "NOT STATION SPECIFIC" : StationRefData.GetName(crs);
+                            Console.WriteLine($"{rescode} : from {starttime.Substring(0, 2)}:{starttime.Substring(2, 2)} to {endtime.Substring(0, 2)}:{endtime.Substring(2, 2)} at CRS {crs} ({name})");
                         }
                     }
                 }
