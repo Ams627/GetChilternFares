@@ -39,6 +39,10 @@ namespace GetChilternFares
                         if (rescode != "  " && flowidMap.Contains(flowid))
                         {
                             rescodeMap.Add(rescode);
+                            if (rescode == "B5")
+                            {
+                                Console.WriteLine();
+                            }
                         }
                     }
                 }
