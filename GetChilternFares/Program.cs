@@ -83,6 +83,10 @@ namespace GetChilternFares
                 {
                     foreach (var entry in resCodeToFlowList)
                     {
+                        str.WriteLine($"{entry.Key}: {entry.Value.Count} flow records.");
+                    }
+                    foreach (var entry in resCodeToFlowList.Where(x=>x.Value.Count() > 0))
+                    {
                         str.WriteLine($"{entry.Key}:");
                         foreach (var flow in entry.Value)
                         {
@@ -90,7 +94,6 @@ namespace GetChilternFares
                         }
                     }
                 }
-
 
                 var dateMap = new Dictionary<string, List<(DateTime startDate, DateTime endDate, string days)>>();
                 foreach (var line in File.ReadAllLines($"s:\\rjfaf{setnum:D3}.rst"))
@@ -124,12 +127,13 @@ namespace GetChilternFares
                         }
                     }
                 }
-                foreach (var entry in dateMap.Where(x=>x.Value.Count() > 0))
+
+                foreach (var entry in dateMap)
                 {
                     var restrictionCode = entry.Key;
                     var dateRestrictionList = entry.Value;
 
-                    Console.WriteLine($"{restrictionCode}");
+                    Console.Write($"{restrictionCode}:");
 
                     var datelist = new List<DateTime>();
 
@@ -155,9 +159,18 @@ namespace GetChilternFares
                         }
                     }
 
-                    foreach (var d in datelist.Where(x=>x.DayOfWeek != DayOfWeek.Saturday && x.DayOfWeek != DayOfWeek.Sunday))
+                    var weekdayList = datelist.Where(x => x.DayOfWeek != DayOfWeek.Saturday && x.DayOfWeek != DayOfWeek.Sunday);
+                    if (weekdayList.Any())
                     {
-                        Console.WriteLine($"{d:dd MMM yyyy}");
+                        Console.WriteLine();
+                        foreach (var d in weekdayList)
+                        {
+                            Console.WriteLine($"    {d:dd MMM yyyy}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(" no unrestricted days.");
                     }
                 }
             }
